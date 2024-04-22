@@ -41,17 +41,17 @@ import {GiTrashCan} from "react-icons/gi";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { allRoomTypes } from "../../../services/roomTypeService";
 import {storage} from '../../../hooks/useFirebase'
-import {allAmenities, editAmenity, newAmenity} from "../../../services/amenityService";
-import {allServices, editService, newService} from "../../../services/servicesService";
+import {allFacilities, editFacility, newFacility} from "../../../services/facilityService";
+import {allKitchenBarOrders} from "../../../services/KitchenBarOrderService";
 
-const Services = () => {
-  const title = 'Services';
-  const description = 'Services';
+const Facilities = () => {
+  const title = 'Facilities';
+  const description = 'Facilities';
 
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState('');
   const [imageName, setImageName] = useState('');
-  const [servicesList, setServicesList] = useState([]);
+  const [facilities, setFacilities] = useState([]);
   const [errorFields, setErrorFields] = useState([]);
   const [images, setImages] = useState(null);
   const [uploadFinished, setUploadFinished] = useState(false);
@@ -60,11 +60,14 @@ const Services = () => {
   const [selectedItem, setSelectedItem] = useState({});
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showItem, setShowItem] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [tabInView, setTabInView] = useState('all')
 
   const [formData, setFormData] = useState({
     name: '',
-    price: '',
-    status: '',
+    description: '',
+    bookingPrice: '',
+    images: '',
   });
 
   const pageSettings = { pageSize: 20 };
@@ -75,7 +78,7 @@ const Services = () => {
 
   const breadcrumbs = [
     { to: '', text: 'Home' },
-    { to: 'dashboards', text: 'Services' },
+    { to: 'dashboards', text: 'Facilities' },
   ];
 
   const { currentUser } = useSelector((state) => state.auth);
@@ -95,14 +98,41 @@ const Services = () => {
   // }, [formData]);
 
   useEffect(() => {
+    allFacilities(1,1000)
+        .then(res => {
+          console.log("Orders: ",{res})
+          if (tabInView === 'all'){
+            setFacilities(res)
+          }
+          else if (tabInView === "good"){
+            const vals = res?.filter(el => (el?.healthStatus === "" || el?.healthStatus === undefined || el?.healthStatus === "good"))
+            setFacilities(vals)
+          }
+          else if (tabInView === "faulty"){
+            const vals = res?.filter(el => el?.healthStatus === "faulty")
+            setFacilities(vals)
+          }
+          else if (tabInView === "available"){
+            const vals = res?.filter(el => (el?.isAvailable === true || el?.isAvailable === undefined))
+            setFacilities(vals)
+          }
+          else if (tabInView === "booked"){
+            const vals = res?.filter(el => el?.isAvailable === false)
+            setFacilities(vals)
+          }
+
+        })
+  }, [tabInView]);
+
+  useEffect(() => {
     // console.log({formData})
     if (uploadFinished && formData?.name !== ''){
       if (saveMode === 'save'){
-        newAmenity(formData)
+        newFacility(formData)
             .then(res => {
-              allServices(1,1000)
+              allFacilities(1,1000)
                   .then(response => {
-                    setServicesList(response)
+                    setFacilities(response)
                   })
               // eslint-disable-next-line no-use-before-define
               handleClearClicked()
@@ -112,11 +142,11 @@ const Services = () => {
         console.log({formData})
         // eslint-disable-next-line no-underscore-dangle
         if (formData?._id){
-          editAmenity(prevKey, formData)
+          editFacility(prevKey, formData)
               .then(res => {
-                allServices(1,1000)
+                allFacilities(1,1000)
                     .then(response => {
-                      setServicesList(response)
+                      setFacilities(response)
                     })
                 // eslint-disable-next-line no-use-before-define
                 handleClearClicked()
@@ -155,7 +185,7 @@ const Services = () => {
         setUploadFinished(true)
         return;
       }
-      const imageRef = storageRef(storage, `amenities/${formData.name}-${i}`);
+      const imageRef = storageRef(storage, `facilities/${formData.name}-${i}`);
 
       uploadBytes(imageRef, imageName[i])
           .then((snapshot) => {
@@ -188,7 +218,7 @@ const Services = () => {
     const invalidFields = []
 
     if (step === 0){
-      const requiredFields = ['name', 'price']
+      const requiredFields = ['name', 'description', 'bookingPrice']
 
       // get all the keys of the booking form
       const keys = Object.keys(formData)
@@ -212,10 +242,10 @@ const Services = () => {
 
   // fetch all room types
   useEffect(() => {
-    allServices(1,1000)
-        .then(response => {
-          console.log({response})
-          setServicesList(response)
+    allFacilities(1,1000)
+        .then(res => {
+          console.log({res})
+          setFacilities(res)
         })
   }, []);
 
@@ -224,35 +254,12 @@ const Services = () => {
     const formValid = validateForm()
     console.log({ formValid })
     console.log({ errorFields });
+    setLoading(true)
     if (formValid){
       setErrorFields([])
-      if (saveMode === 'save'){
-        newService(formData)
-            .then(res => {
-              allServices(1,1000)
-                  .then(response => {
-                    setServicesList(response)
-                  })
-              // eslint-disable-next-line no-use-before-define
-              handleClearClicked()
-            })
-      }
-      else{
-        console.log({formData})
-        // eslint-disable-next-line no-underscore-dangle
-        if (formData?._id){
-          editService(prevKey, formData)
-              .then(res => {
-                allServices(1,1000)
-                    .then(response => {
-                      setServicesList(response)
-                    })
-                // eslint-disable-next-line no-use-before-define
-                handleClearClicked()
-                setSaveMode('save')
-              })
-        }
-      }
+      // setStep((prevState) => prevState + 1);
+      await uploadImage();
+      setLoading(false)
 
     }
 
@@ -261,9 +268,13 @@ const Services = () => {
   const handleClearClicked = () => {
     setFormData({
       name: '',
-      price: '',
-      status: '',
+      description: '',
+      bookingPrice: '',
+      images: '',
     })
+
+    // clear the input ref
+    ref.current.value = "";
   }
 
   const handleEditIconClicked = (row) => {
@@ -273,23 +284,21 @@ const Services = () => {
       ...row,
     })
     setSaveMode('edit')
-    // eslint-disable-next-line no-underscore-dangle
-    setPrevKey(row?._id)
+    setPrevKey(row?.name)
   }
 
   const handleDeleteIconClicked = (row) => {
-    // eslint-disable-next-line no-underscore-dangle
-    setPrevKey(row?._id)
+    setPrevKey(row?.name)
     setShowDeleteAlert(true)
   }
 
-  const deleteItem = (id) => {
-    editService(id, { isDeleted: true, })
+  const deleteItem = (name) => {
+    editFacility(name, { isDeleted: true, })
         .then(res => {
-          allServices(1,1000)
+          allFacilities(1,1000)
               .then(response => {
+                setFacilities(response)
                 setShowDeleteAlert(false)
-                setServicesList(response)
               })
         })
   }
@@ -305,9 +314,9 @@ const Services = () => {
 
   const ActionButtons = (props) => {
     return <div className='d-flex'>
-      {/* <button onClick={() => openItemModal(props)} type='button' className="btn btn-primary rounded-2 me-3"> */}
-      {/*  <BsEye style={{width: 15, height: 15}} /> */}
-      {/* </button> */}
+      <button onClick={() => openItemModal(props)} type='button' className="btn btn-primary rounded-2 me-3">
+        <BsEye style={{width: 15, height: 15}} />
+      </button>
       <button onClick={() => handleEditIconClicked(props)} type='button' className="btn btn-secondary rounded-2 me-3">
         <FaPencil style={{width: 15, height: 15}} />
       </button>
@@ -344,41 +353,55 @@ const Services = () => {
             <input name='name' type="text" value={formData.name} className="form-control" onChange={handleChange}/>
           </Col>
           <Col md={4} className='mb-4 mb-md-0'>
-            <label htmlFor="price">Price <span className='text-danger font-weight-bold'>*</span></label>
-            <input name='price' type="text" value={formData.price} className="form-control" onChange={handleChange}/>
+            <label htmlFor="description">Description <span className='text-danger font-weight-bold'>*</span></label>
+            <input name='description' type="text" value={formData.description} className="form-control" onChange={handleChange}/>
           </Col>
           <Col md={4} className='mb-4 mb-md-0'>
-            <label htmlFor="status">Status </label>
+            <label htmlFor="bookingPrice">Booking Price </label>
             {/* eslint-disable-next-line jsx-a11y/no-onchange */}
-            <select name='status' value={formData.status} className="form-control" onChange={handleChange}>
-              <option value="">Select a service status</option>
-              <option value="general">General</option>
-            </select>
+            <input name='bookingPrice' value={formData.bookingPrice} className="form-control" onChange={handleChange} />
           </Col>
         </Row>
-        <Row className="justify-content-center mb-7 mb-md-7">
+        <Row className="mb-md-4">
+          <Col md={4} className='mb-4 mb-md-0'>
+            <label htmlFor="images">Images </label>
+            <input ref={ref} name='images' type="file" multiple accept='image/*' min={0} className="form-control" onChange={handleImagesSelected}/>
+          </Col>
+        </Row>
+        <Row className="justify-content-center mb-4 mb-md-7">
           <Col md={3} className="align-self-center">
-            <Button onClick={handleSaveClicked} style={{height:45}} className="btn-danger btn-large w-100 rounded-2">
+            <Button disabled={loading} onClick={handleSaveClicked} style={{height:45}} className="btn-danger btn-large w-100 rounded-2">
               {
                 saveMode === 'save'? "Save": "Save Changes"
               } <FaFloppyDisk />
             </Button>
           </Col>
           <Col md={3} className="align-self-center">
-            <Button onClick={handleClearClicked} style={{height:45}} className="btn-secondary btn-large w-100 rounded-2">
+            <Button disabled={loading} onClick={handleClearClicked} style={{height:45}} className="btn-secondary btn-large w-100 rounded-2">
               {
                 saveMode === 'save'? "Clear": "Cancel"
               } <MdCancel />
             </Button>
           </Col>
         </Row>
+        <Row className='mb-4'>
+          <Col className="d-flex flex-row">
+            <h5 onClick={() => setTabInView('all')} className={tabInView==='all'?"text-decoration-underline font-weight-bold text-primary me-4":"me-4 cursor-pointer"}>All</h5>
+            <h5 onClick={() => setTabInView('good')} className={tabInView==='good'?"text-decoration-underline font-weight-bold text-primary me-4":"me-4 cursor-pointer"}>Good</h5>
+            <h5 onClick={() => setTabInView('faulty')} className={tabInView==='faulty'?"text-decoration-underline font-weight-bold text-primary me-4":"me-4 cursor-pointer"}>Faulty</h5>
+            <h5 onClick={() => setTabInView('available')} className={tabInView==='available'?"text-decoration-underline font-weight-bold text-primary me-4":"me-4 cursor-pointer"}>Available</h5>
+            <h5 onClick={() => setTabInView('booked')} className={tabInView==='booked'?"text-decoration-underline font-weight-bold text-primary me-4":"me-4 cursor-pointer"}>Booked</h5>
+          </Col>
+
+        </Row>
         <Row>
           <Col>
-            <GridComponent dataSource={servicesList} allowPaging pageSettings={pageSettings} allowSorting sortSettings={sortSettings}>
+            <GridComponent dataSource={facilities} allowPaging pageSettings={pageSettings} allowSorting sortSettings={sortSettings}>
               <ColumnsDirective>
                 <ColumnDirective field='name' headerText='Name' width='100'/>
-                <ColumnDirective field='price' headerText='Price' width='100'/>
-                <ColumnDirective field='status' headerText='Status' width='100'/>
+                <ColumnDirective field='description' headerText='Description' width='100'/>
+                <ColumnDirective field='bookingPrice' headerText='Booking Price' width='100'/>
+                 <ColumnDirective field='images' headerText='Images' width='100'/>
                 <ColumnDirective headerText='Actions' template={ActionButtons} width='100'/>
               </ColumnsDirective>
               <Inject services={[Page, Sort, Filter]}/>
@@ -387,7 +410,7 @@ const Services = () => {
         </Row>
         {showDeleteAlert && (
             <SweetAlert
-                title="Delete amenity"
+                title="Delete facility"
                 info
                 showCancel
                 confirmBtnBsStyle="warning"
@@ -400,12 +423,12 @@ const Services = () => {
                     setShowDeleteAlert(false)
                 }}
             >
-              Are you sure you want to delete this amenity?
+              Are you sure you want to delete this facility?
             </SweetAlert>
         )}
         <Modal show={showItem} onHide={closeItemModal} size="lg" centered>
           <Modal.Header closeButton>
-            <Modal.Title>Amenity</Modal.Title>
+            <Modal.Title>Facility</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Row className="mb-2">
@@ -414,8 +437,8 @@ const Services = () => {
                <p className='font-weight-bold' style={{fontSize: 24}}>{selectedItem?.name}</p>
              </Col>
               <Col>
-                <p className='h5'>Category: </p>
-                <p className='font-weight-bold text-capitalize' style={{fontSize: 24}}>{selectedItem?.category}</p>
+                <p className='h5'>Booking Price: </p>
+                <p className='font-weight-bold text-capitalize' style={{fontSize: 24}}>{selectedItem?.bookingPrice}</p>
               </Col>
             </Row>
             <Row className="mb-2">
@@ -429,7 +452,7 @@ const Services = () => {
                 <p className='h5'>Images: </p>
                 {
                   selectedItem?.images?.map((item, index) => {
-                    return <img key={index} src={item} alt={`amenity image ${index}`} style={{width: 200, height: 200}} />
+                    return <img key={index} src={item} alt={`facility image ${index}`} style={{width: 200, height: 200}} />
                   })
                 }
               </Col>
@@ -454,4 +477,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default Facilities;

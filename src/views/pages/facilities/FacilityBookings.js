@@ -48,20 +48,16 @@ import {
   editKitchenBarCategories,
   newKitchenBarCategories
 } from "../../../services/KitchenBarCategoryService";
-import {
-  allKitchenBarOrders,
-  editKitchenBarOrder,
-  newKitchenBarOrder
-} from "../../../services/KitchenBarOrderService";
+import {allFacilityBookings, editFacilityBookings} from "../../../services/facilityBookingsService";
 
-const KitchenBarOrders = () => {
-  const title = 'Kitchen and Bar Orders';
-  const description = 'Kitchen and Bar Orders';
+const FacilityBookings = () => {
+  const title = 'Facility Bookings';
+  const description = 'Facility Bookings';
 
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState('');
   const [imageName, setImageName] = useState('');
-  const [allOrders, setAllOrders] = useState([]);
+  const [faciltyBookings, setFaciltyBookings] = useState([]);
   const [amenities, setAmenities] = useState([]);
   const [services, setServices] = useState([]);
   const [errorFields, setErrorFields] = useState([]);
@@ -74,24 +70,33 @@ const KitchenBarOrders = () => {
   const [showItem, setShowItem] = useState(false);
 
   const [formData, setFormData] = useState({
-    roomNumber: '',
+    facility: '',
+    bookedBy: '',
+    startDate: '',
+    endDate: '',
+    guests: '',
+    depositAmount: '',
+    balanceAmount: '',
     status: '',
-    comments: '',
-    customerName: '',
+    createdAt: '',
   });
 
   const [tabInView, setTabInView] = useState('all')
 
-  const StatusTemplate = ({orderDetails}) => {
-    const { status } = orderDetails
-    // return <div className="text-capitalize">{status}</div>
+  const StartDateTemplate = ({startDate}) => {
+    return <div className="text-capitalize">{new Date(startDate).toDateString()}</div>
+  }
+
+  const EndDateTemplate = ({endDate}) => {
+    return <div className="text-capitalize">{new Date(endDate).toDateString()}</div>
+  }
+
+  const StatusTemplate = ({status}) => {
     switch (status){
       case 'pending':
         return <div className="text-capitalize bg-warning text-center">{status}</div>
-      case 'in progress':
-        return <div className="text-capitalize bg-primary text-center text-white">{status}</div>
-      case 'delivered':
-        return <div className="text-capitalize bg-success text-center">{status}</div>
+      case 'confirmed':
+        return <div className="text-capitalize bg-success text-center text-white">{status}</div>
       case 'cancelled':
         return <div className="text-capitalize bg-danger text-center">{status}</div>
       default:
@@ -99,17 +104,6 @@ const KitchenBarOrders = () => {
     }
   }
 
-  const ItemsTemplate = ({ orderItems }) => {
-    // Map through orderItems to create an array of JSX elements
-    const itemsDisplay = orderItems.map((item, index) => (
-        <div key={index}>
-          {item?.quantity} portion of {item?.Id?.name}
-          <br /><br />
-        </div>
-    ));
-
-    return itemsDisplay;
-  };
 
   const pageSettings = { pageSize: 20 };
   const sortSettings = { columns: [
@@ -118,8 +112,8 @@ const KitchenBarOrders = () => {
 
 
   const breadcrumbs = [
-    { to: '', text: 'Kitchen and Bar' },
-    { to: 'dashboards', text: 'Food/Drink Orders' },
+    { to: '', text: 'Facility Bookings' },
+    { to: 'dashboards', text: 'Facility Bookings' },
   ];
 
   const { currentUser } = useSelector((state) => state.auth);
@@ -144,7 +138,7 @@ const KitchenBarOrders = () => {
     const invalidFields = []
 
     if (step === 0){
-      const requiredFields = ['status']
+      const requiredFields = ['status','facility','bookedBy']
 
       // get all the keys of the booking form
       const keys = Object.keys(formData)
@@ -168,15 +162,15 @@ const KitchenBarOrders = () => {
 
   // fetch all room types
   useEffect(() => {
-    allKitchenBarOrders(1,1000)
+    allFacilityBookings(1,1000)
         .then(res => {
-          console.log("Orders: ",{res})
+          console.log("Facilty Bookings: ",{res})
           if (tabInView === 'all'){
-            setAllOrders(res)
+            setFaciltyBookings(res)
           }
           else{
-            const vals = res?.filter(el => el?.orderDetails?.status === tabInView)
-            setAllOrders(vals)
+            const vals = res?.filter(el => el?.status === tabInView)
+            setFaciltyBookings(vals)
           }
 
         })
@@ -197,27 +191,12 @@ const KitchenBarOrders = () => {
 
       }
       else{
-         const payload = {
-           customer: {
-             ...selectedItem?.customer,
-             ...{
-               roomNumber: formData?.roomNumber
-             }
-           },
-           orderDetails: {
-             ...selectedItem?.orderDetails,
-             ...{
-               status:formData.status,
-               comments: formData?.comments
-             }
-           },
-           orderItems: selectedItem?.orderItems,
-         }
-          editKitchenBarOrder(prevKey, payload)
+          editFacilityBookings(prevKey, formData)
               .then(res => {
-                allKitchenBarOrders(1,1000)
+                console.log({res})
+                allFacilityBookings(1,1000)
                     .then(response => {
-                      setAllOrders(response)
+                      setFaciltyBookings(response)
                     })
                 // eslint-disable-next-line no-use-before-define
                 handleClearClicked()
@@ -231,10 +210,15 @@ const KitchenBarOrders = () => {
 
   const handleClearClicked = () => {
     setFormData({
-      roomNumber: '',
+      facility: '',
+      bookedBy: '',
+      startDate: '',
+      endDate: '',
+      guests: '',
+      depositAmount: '',
+      balanceAmount: '',
       status: '',
-      comments: '',
-      customerName: '',
+      createdAt: '',
     })
 
     setSaveMode('save')
@@ -242,16 +226,7 @@ const KitchenBarOrders = () => {
 
   const handleEditIconClicked = (row) => {
     console.log({row})
-    const data = {
-      customerName: row?.customer?.name,
-      roomNumber: row?.customer?.roomNumber,
-      status: row?.orderDetails?.status,
-      comments: row?.orderDetails?.comments,
-    }
-    setFormData({
-      ...formData,
-      ...data,
-    })
+    setFormData(row)
     setSaveMode('edit')
     // eslint-disable-next-line no-underscore-dangle
     setPrevKey(row?._id)
@@ -266,11 +241,11 @@ const KitchenBarOrders = () => {
   }
 
   const deleteItem = (id) => {
-    editKitchenBarOrder(id, { isDeleted: true, })
+    editFacilityBookings(id, { isDeleted: true, })
         .then(res => {
-          allKitchenBarOrders(1,1000)
+          allFacilityBookings(1,1000)
               .then(response => {
-                setAllOrders(response)
+                setFaciltyBookings(response)
                 setShowDeleteAlert(false)
               })
         })
@@ -323,12 +298,36 @@ const KitchenBarOrders = () => {
         { saveMode === 'edit' && <>
           <Row className="mb-md-4">
             <Col md={4} className='mb-4 mb-md-0'>
-              <label htmlFor="customerName">Customer Name <span className='text-danger font-weight-bold'>*</span></label>
-              <input disabled name='customerName' value={formData.customerName} className="form-control" onChange={handleChange} />
+              <label htmlFor="facility">Facility Name <span className='text-danger font-weight-bold'>*</span></label>
+              <input disabled name='facility' value={formData.facility?.name} className="form-control" onChange={handleChange} />
             </Col>
             <Col md={4} className='mb-4 mb-md-0'>
-              <label htmlFor="roomNumber">Room Number <span className='text-danger font-weight-bold'>*</span></label>
-              <input name='roomNumber' type="text" value={formData.roomNumber} className="form-control" onChange={handleChange}/>
+              <label htmlFor="bookedBy">Booked By <span className='text-danger font-weight-bold'>*</span></label>
+              <input name='bookedBy' type="text" value={formData.bookedBy} className="form-control" onChange={handleChange}/>
+            </Col>
+            <Col md={4} className='mb-4 mb-md-0'>
+              <label htmlFor="startDate">Start Date <span className='text-danger font-weight-bold'>*</span></label>
+              <input name='startDate' type="date" value={formData.startDate ? new Date(formData.startDate).toISOString().split('T')[0] : ''} className="form-control" onChange={handleChange}/>
+            </Col>
+          </Row>
+          <Row className="mb-md-4">
+            <Col md={4} className='mb-4 mb-md-0'>
+              <label htmlFor="endDate">End Date <span className='text-danger font-weight-bold'>*</span></label>
+              <input name='endDate' type="datetime-local" value={new Date(formData.endDate)} className="form-control" onChange={handleChange}/>
+            </Col>
+            <Col md={4} className='mb-4 mb-md-0'>
+              <label htmlFor="guests">Guests <span className='text-danger font-weight-bold'>*</span></label>
+              <input name='guests' type="text" value={formData.guests} className="form-control" onChange={handleChange}/>
+            </Col>
+            <Col md={4} className='mb-4 mb-md-0'>
+              <label htmlFor="depositAmount">Deposit Amount <span className='text-danger font-weight-bold'>*</span></label>
+              <input name='depositAmount' type="text" value={formData.depositAmount} className="form-control" onChange={handleChange}/>
+            </Col>
+          </Row>
+          <Row className="mb-md-4">
+            <Col md={4} className='mb-4 mb-md-0'>
+              <label htmlFor="balanceAmount">Balance Amount <span className='text-danger font-weight-bold'>*</span></label>
+              <input name='balanceAmount' type="text" value={formData.balanceAmount} className="form-control" onChange={handleChange}/>
             </Col>
             <Col md={4} className='mb-4 mb-md-0'>
               <label htmlFor="status">Status <span className='text-danger font-weight-bold'>*</span></label>
@@ -336,16 +335,9 @@ const KitchenBarOrders = () => {
               <select name='status' value={formData.status} className="form-control" onChange={handleChange}>
                 <option value="">Select a status</option>
                 <option value="pending">Pending</option>
-                <option value="in progress">In Progress</option>
-                <option value="delivered">Delivered</option>
+                <option value="confirmed">Confirmed</option>
                 <option value="cancelled">Cancelled</option>
               </select>
-            </Col>
-          </Row>
-          <Row className="mb-md-4">
-            <Col>
-              <label htmlFor="comments">Comments</label>
-              <textarea name="comments" value={formData.comments} className='form-control' cols="30" rows="5" onChange={handleChange} />
             </Col>
           </Row>
           <Row className="justify-content-center mb-4 mb-md-7 mt-3 g-3">
@@ -368,8 +360,7 @@ const KitchenBarOrders = () => {
         <Row className='mb-4'>
           <Col className="d-flex flex-row">
             <h5 onClick={() => setTabInView('all')} className={tabInView==='all'?"text-decoration-underline font-weight-bold text-primary me-4":"me-4 cursor-pointer"}>All</h5>
-            <h5 onClick={() => setTabInView('delivered')} className={tabInView==='delivered'?"text-decoration-underline font-weight-bold text-primary me-4":"me-4 cursor-pointer"}>Delivered</h5>
-            <h5 onClick={() => setTabInView('in progress')} className={tabInView==='in progress'?"text-decoration-underline font-weight-bold text-primary me-4":"me-4 cursor-pointer"}>In Progress</h5>
+            <h5 onClick={() => setTabInView('confirmed')} className={tabInView==='confirmed'?"text-decoration-underline font-weight-bold text-primary me-4":"me-4 cursor-pointer"}>Confirmed</h5>
             <h5 onClick={() => setTabInView('pending')} className={tabInView==='pending'?"text-decoration-underline font-weight-bold text-primary me-4":"me-4 cursor-pointer"}>Pending</h5>
             <h5 onClick={() => setTabInView('cancelled')} className={tabInView==='cancelled'?"text-decoration-underline font-weight-bold text-primary me-4":"me-4 cursor-pointer"}>Cancelled</h5>
           </Col>
@@ -377,13 +368,14 @@ const KitchenBarOrders = () => {
         </Row>
           <Row>
             <Col>
-              <GridComponent dataSource={allOrders} allowPaging pageSettings={pageSettings} allowSorting sortSettings={sortSettings}>
+              <GridComponent dataSource={faciltyBookings} allowPaging pageSettings={pageSettings} allowSorting sortSettings={sortSettings}>
                 <ColumnsDirective>
-                  <ColumnDirective field='customer.name' headerText='Customer Name' width='100'/>
-                  <ColumnDirective field='customer.roomNumber' headerText='Room Number' width='100' />
-                  <ColumnDirective field='items' headerText='Items' width='100' template={ItemsTemplate} />
-                  <ColumnDirective field='orderDetails.totalAmount' headerText='Total' width='100' />
-                  <ColumnDirective field='orderDetails.status' headerText='Status' width='100' template={StatusTemplate} />
+                  <ColumnDirective field='facility.name' headerText='Facility' width='80'/>
+                  <ColumnDirective field='bookedBy' headerText='Booked By' width='80' />
+                  <ColumnDirective field='guests' headerText='Guests' width='100' />
+                  <ColumnDirective field='startDate' headerText='Start Date' template={StartDateTemplate} width='100' />
+                  <ColumnDirective field='endDate' headerText='End Date' template={EndDateTemplate} width='100' />
+                  <ColumnDirective field='status' headerText='Status' template={StatusTemplate} width='100' />
                   <ColumnDirective headerText='Actions' template={ActionButtons} width='100'/>
                 </ColumnsDirective>
                 <Inject services={[Page, Sort, Filter]}/>
@@ -452,7 +444,7 @@ const KitchenBarOrders = () => {
                   <p className='h5'>Ordered items: </p>
                   {
                     selectedItem?.orderItems?.map((item,index) => {
-                      return <p key={index} className='font-weight-bold' style={{fontSize: 16}}>{item?.quantity} portion of {item?.Id?.name}</p>
+                      return <p key={index} className='font-weight-bold' style={{fontSize: 16}}>{item?.quantity} unit of {item?.Id?.name}</p>
                     })
                   }
                 </Col>
@@ -481,4 +473,4 @@ const KitchenBarOrders = () => {
   );
 };
 
-export default KitchenBarOrders;
+export default FacilityBookings;

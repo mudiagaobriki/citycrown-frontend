@@ -23,6 +23,12 @@ import {BsApp} from "react-icons/bs";
 import KitchenBarCategories from "./views/pages/kitchen-bar/KitchenBarCategories";
 import KitchenBarPresets from "./views/pages/kitchen-bar/KitchenBarPresets";
 import KitchenBarOrders from "./views/pages/kitchen-bar/KitchenBarOrders";
+import ServiceOrders from "./views/pages/services/ServiceOrders";
+import Facilities from "./views/pages/facilities/Facilities";
+import FacilityBookings from "./views/pages/facilities/FacilityBookings";
+import TextMessaging from "./views/pages/messaging/TextMessaging";
+import NewCustomer from "./views/pages/customers/NewCustomer";
+import CustomerList from "./views/pages/customers/CustomerList";
 
 const dashboards = {
   index: lazy(() => import('views/dashboards/Dashboards')),
@@ -250,8 +256,8 @@ const routesAndMenuItems = {
     // },
     // {
     //   path: `${appRoot}/amenities`,
-    //   component: Amenities,
-    //   label: 'Amenities',
+    //   component: Facilities,
+    //   label: 'Facilities',
     //   icon: <BiWifi size={30} color="white" />,
     //   // subs: [
     //   //   { path: '/default', label: 'menu.default', component: dashboards.default },
@@ -273,25 +279,25 @@ const routesAndMenuItems = {
     },
     {
       path: `${appRoot}/reception-requests`,
-      component: Amenities,
+      component: Services,
       label: 'Room Service',
       icon: <GiTowel size={30} color="white" />,
       subs: [
-        { path: '/services-list', label: 'Services List', component: dashboards.visual },
-        { path: '/services-status', label: 'Service Status', component: dashboards.visual },
+        { path: '/services-list', label: 'Services List', component: Services },
+        { path: '/services-status', label: 'Service Status', component: ServiceOrders },
         // { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
       ],
     },
     {
       path: `${appRoot}/repairs`,
-      component: Amenities,
+      component: Facilities,
       label: 'Facility/Repairs',
       icon: <TbAirConditioning size={30} color="white" />,
       subs: [
-        { path: '/facility-list', label: 'Facility Lists', component: Amenities },
+        { path: '/facility-list', label: 'Facility Lists', component: Facilities },
         { path: '/amenities', label: 'Amenities', component: Amenities },
-        { path: '/amenities-status', label: 'Amenities Status', component: dashboards.visual },
-        { path: '/facility-booking', label: 'Facility Bookings', component: dashboards.visual },
+        // { path: '/amenities-status', label: 'Facilities Status', component: dashboards.visual },
+        { path: '/facility-booking', label: 'Facility Bookings', component: FacilityBookings },
         { path: '/repairs', label: 'Repairs', component: dashboards.visual },
       ],
     },
@@ -345,8 +351,9 @@ const routesAndMenuItems = {
       label: 'CRM',
       icon: <FaUserFriends size={30} color="white" />,
       subs: [
-        { path: '/customers', label: 'Customers List', component: dashboards.visual },
-        { path: '/messaging', label: 'Messaging', component: dashboards.visual }, // sms, email, whatsapp
+        { path: '/new-customer', label: 'New Customer', component: NewCustomer },
+        { path: '/list', label: 'Customers List', component: CustomerList },
+        { path: '/messaging', label: 'Messaging', component: TextMessaging }, // sms, email, whatsapp
         { path: '/automatic-messaging', label: 'Automatic Messaging', component: dashboards.visual }, // automatic messaging settings
       ],
     },

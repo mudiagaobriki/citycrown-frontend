@@ -53,10 +53,11 @@ import {
   editKitchenBarOrder,
   newKitchenBarOrder
 } from "../../../services/KitchenBarOrderService";
+import {allServiceOrders, editServiceOrder} from "../../../services/ServiceOrderService";
 
-const KitchenBarOrders = () => {
-  const title = 'Kitchen and Bar Orders';
-  const description = 'Kitchen and Bar Orders';
+const ServiceOrders = () => {
+  const title = 'Service Orders';
+  const description = 'Service Orders';
 
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState('');
@@ -103,7 +104,7 @@ const KitchenBarOrders = () => {
     // Map through orderItems to create an array of JSX elements
     const itemsDisplay = orderItems.map((item, index) => (
         <div key={index}>
-          {item?.quantity} portion of {item?.Id?.name}
+          {item?.quantity} unit of {item?.Id?.name}
           <br /><br />
         </div>
     ));
@@ -118,8 +119,8 @@ const KitchenBarOrders = () => {
 
 
   const breadcrumbs = [
-    { to: '', text: 'Kitchen and Bar' },
-    { to: 'dashboards', text: 'Food/Drink Orders' },
+    { to: '', text: 'Room Service' },
+    { to: 'dashboards', text: 'Room Service Orders' },
   ];
 
   const { currentUser } = useSelector((state) => state.auth);
@@ -168,7 +169,7 @@ const KitchenBarOrders = () => {
 
   // fetch all room types
   useEffect(() => {
-    allKitchenBarOrders(1,1000)
+    allServiceOrders(1,1000)
         .then(res => {
           console.log("Orders: ",{res})
           if (tabInView === 'all'){
@@ -213,9 +214,9 @@ const KitchenBarOrders = () => {
            },
            orderItems: selectedItem?.orderItems,
          }
-          editKitchenBarOrder(prevKey, payload)
+          editServiceOrder(prevKey, payload)
               .then(res => {
-                allKitchenBarOrders(1,1000)
+                allServiceOrders(1,1000)
                     .then(response => {
                       setAllOrders(response)
                     })
@@ -266,9 +267,9 @@ const KitchenBarOrders = () => {
   }
 
   const deleteItem = (id) => {
-    editKitchenBarOrder(id, { isDeleted: true, })
+    editServiceOrder(id, { isDeleted: true, })
         .then(res => {
-          allKitchenBarOrders(1,1000)
+          allServiceOrders(1,1000)
               .then(response => {
                 setAllOrders(response)
                 setShowDeleteAlert(false)
@@ -452,7 +453,7 @@ const KitchenBarOrders = () => {
                   <p className='h5'>Ordered items: </p>
                   {
                     selectedItem?.orderItems?.map((item,index) => {
-                      return <p key={index} className='font-weight-bold' style={{fontSize: 16}}>{item?.quantity} portion of {item?.Id?.name}</p>
+                      return <p key={index} className='font-weight-bold' style={{fontSize: 16}}>{item?.quantity} unit of {item?.Id?.name}</p>
                     })
                   }
                 </Col>
@@ -481,4 +482,4 @@ const KitchenBarOrders = () => {
   );
 };
 
-export default KitchenBarOrders;
+export default ServiceOrders;

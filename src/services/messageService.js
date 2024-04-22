@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {API_URL} from "../assets/constants";
 
-export async function allServices(page, limit) {
+export async function allMessages(page, limit) {
     const res = await axios.get(`${API_URL}/services/all/${page}/${limit}`);
 
     // console.log("Data: ", res?.data)
@@ -10,8 +10,8 @@ export async function allServices(page, limit) {
     return docs.filter(el => el?.isDeleted !== true);
 }
 
-export async function newService(payload) {
-    const res = await axios.post(`${API_URL}/services/new`,payload);
+export async function newMessage(payload) {
+    const res = await axios.post(`${API_URL}/messages/new`,payload);
 
     return res?.data;
 }
