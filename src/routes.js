@@ -2,33 +2,35 @@
 import { lazy } from 'react';
 import { USER_ROLE } from 'constants.js';
 import { DEFAULT_PATHS } from 'config.js';
-import Withdrawals from "./views/pages/withdrawals/Withdrawals";
-import Admin from "./views/pages/admin/Admin";
-import VerificationPage from "./views/pages/authentication/VerifyEmail";
-import Wallet from "./views/pages/wallet/Wallet";
-import {MdAttachMoney, MdHome, MdRoom,} from "react-icons/md";
-import {IoBriefcaseOutline, IoHomeSharp, IoLogoGooglePlaystore, IoWallet} from "react-icons/io5";
-import {IoMdBriefcase} from "react-icons/io";
-import {FaBriefcase, FaCog, FaCogs, FaFileArchive, FaQrcode, FaUserCog, FaUserFriends, FaWallet} from "react-icons/fa";
-import RoomTypes from "./views/pages/room-types/RoomTypes";
-import Amenities from "./views/pages/amenities/Amenities";
-import {BiBarcode, BiFoodMenu, BiWifi} from "react-icons/bi";
-import Services from "./views/pages/services/Services";
-import Rooms from "./views/pages/rooms/Rooms";
-import Requisition from "./views/pages/requisition/Requisition";
-import {TbAirConditioning} from "react-icons/tb";
-import {GiTowel} from "react-icons/gi";
-import {GoReport} from "react-icons/go";
-import {BsApp} from "react-icons/bs";
-import KitchenBarCategories from "./views/pages/kitchen-bar/KitchenBarCategories";
-import KitchenBarPresets from "./views/pages/kitchen-bar/KitchenBarPresets";
-import KitchenBarOrders from "./views/pages/kitchen-bar/KitchenBarOrders";
-import ServiceOrders from "./views/pages/services/ServiceOrders";
-import Facilities from "./views/pages/facilities/Facilities";
-import FacilityBookings from "./views/pages/facilities/FacilityBookings";
-import TextMessaging from "./views/pages/messaging/TextMessaging";
-import NewCustomer from "./views/pages/customers/NewCustomer";
-import CustomerList from "./views/pages/customers/CustomerList";
+import Withdrawals from './views/pages/withdrawals/Withdrawals';
+import Admin from './views/pages/admin/Admin';
+import VerificationPage from './views/pages/authentication/VerifyEmail';
+import Wallet from './views/pages/wallet/Wallet';
+import { MdAttachMoney, MdHome, MdRoom } from 'react-icons/md';
+import { IoBriefcaseOutline, IoHomeSharp, IoLogoGooglePlaystore, IoWallet } from 'react-icons/io5';
+import { IoMdBriefcase } from 'react-icons/io';
+import { FaBriefcase, FaCog, FaCogs, FaFileArchive, FaQrcode, FaUserCog, FaUserFriends, FaWallet } from 'react-icons/fa';
+import RoomTypes from './views/pages/room-types/RoomTypes';
+import Amenities from './views/pages/amenities/Amenities';
+import { BiBarcode, BiFoodMenu, BiWifi } from 'react-icons/bi';
+import Services from './views/pages/services/Services';
+import Rooms from './views/pages/rooms/Rooms';
+import Requisition from './views/pages/requisition/Requisition';
+import { TbAirConditioning } from 'react-icons/tb';
+import { GiTowel } from 'react-icons/gi';
+import { GoReport } from 'react-icons/go';
+import { BsApp } from 'react-icons/bs';
+import KitchenBarCategories from './views/pages/kitchen-bar/KitchenBarCategories';
+import KitchenBarPresets from './views/pages/kitchen-bar/KitchenBarPresets';
+import KitchenBarOrders from './views/pages/kitchen-bar/KitchenBarOrders';
+import ServiceOrders from './views/pages/services/ServiceOrders';
+import Facilities from './views/pages/facilities/Facilities';
+import FacilityBookings from './views/pages/facilities/FacilityBookings';
+import TextMessaging from './views/pages/messaging/TextMessaging';
+import NewCustomer from './views/pages/customers/NewCustomer';
+import CustomerList from './views/pages/customers/CustomerList';
+import Store from 'views/pages/store/Store';
+import StoreList from 'views/pages/store/StoreList';
 
 const dashboards = {
   index: lazy(() => import('views/dashboards/Dashboards')),
@@ -75,7 +77,7 @@ const pages = {
   },
   portfolio: {
     index: lazy(() => import('views/pages/portfolio/Portfolio')),
-    home:  lazy(() => import('views/pages/portfolio/PortfolioHome')),
+    home: lazy(() => import('views/pages/portfolio/PortfolioHome')),
     detail: lazy(() => import('views/pages/portfolio/PortfolioDetail')),
   },
   profile: {
@@ -178,7 +180,7 @@ const interfaces = {
     typography: lazy(() => import('views/interface/content/Typography')),
     menu: {
       index: lazy(() => import('views/interface/content/menu/Menu')),
-      horizontal:  lazy(() => import('views/interface/content/menu/Horizontal')),
+      horizontal: lazy(() => import('views/interface/content/menu/Horizontal')),
       vertical: lazy(() => import('views/interface/content/menu/Vertical')),
       verticalHidden: lazy(() => import('views/interface/content/menu/VerticalHidden')),
       verticalNoHidden: lazy(() => import('views/interface/content/menu/VerticalNoHidden')),
@@ -202,7 +204,7 @@ const routesAndMenuItems = {
       path: `${appRoot}/dashboard`,
       component: dashboards.visual,
       label: 'Dashboard',
-      icon: <MdHome size={35} color="white" /> ,
+      icon: <MdHome size={35} color="white" />,
       // component: `${appRoot}/dashboards/default`,
       //  subs: [
       //   { path: '/default', label: 'menu.default', component: dashboards.default },
@@ -314,14 +316,13 @@ const routesAndMenuItems = {
     },
     {
       path: `${appRoot}/store`,
-      component: dashboards.visual,
+      component: Store,
       label: 'Store',
       icon: <FaUserFriends size={30} color="white" />,
-      // subs: [
-      //   { path: '/default', label: 'menu.default', component: dashboards.default },
-      //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
-      //   { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
-      // ],
+      subs: [
+        { path: '/store-list', label: 'Store List', component: StoreList },
+        { path: '/new', label: 'Add Store Item', component: Store },
+      ],
     },
     {
       path: `${appRoot}/requisition`,
@@ -371,20 +372,21 @@ const routesAndMenuItems = {
         { path: '/analytics', label: 'Analytics', component: dashboards.analytic },
       ],
     },
-      JSON.parse(localStorage.getItem("currentUser"))?.email ?
-    {
-      path: `${appRoot}/admin`,
-      component: dashboards.visual,
-      label: 'Users',
-      icon: <FaCog size={30} color="white" />,
-      // subs: [
-      //   { path: '/default', label: 'menu.default', component: dashboards.default },
-      //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
-      //   { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
-      // ],
-    }: {},
-    JSON.parse(localStorage.getItem("currentUser"))?.email ?
-        {
+    JSON.parse(localStorage.getItem('currentUser'))?.email
+      ? {
+          path: `${appRoot}/admin`,
+          component: dashboards.visual,
+          label: 'Users',
+          icon: <FaCog size={30} color="white" />,
+          // subs: [
+          //   { path: '/default', label: 'menu.default', component: dashboards.default },
+          //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
+          //   { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
+          // ],
+        }
+      : {},
+    JSON.parse(localStorage.getItem('currentUser'))?.email
+      ? {
           path: `${appRoot}/generate`,
           component: Amenities,
           label: 'Bar Code',
@@ -395,7 +397,8 @@ const routesAndMenuItems = {
             { path: '/barcode-settings', label: 'Barcode Settings', component: dashboards.visual },
             // { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
           ],
-        }: {},
+        }
+      : {},
     {
       path: `${appRoot}/app-settings`,
       component: Amenities,
