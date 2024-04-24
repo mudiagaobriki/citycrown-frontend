@@ -31,6 +31,8 @@ import NewCustomer from './views/pages/customers/NewCustomer';
 import CustomerList from './views/pages/customers/CustomerList';
 import Store from 'views/pages/store/Store';
 import StoreList from 'views/pages/store/StoreList';
+import UserList from 'views/pages/users/UserList';
+import AddUser from 'views/pages/users/AddUser';
 
 const dashboards = {
   index: lazy(() => import('views/dashboards/Dashboards')),
@@ -378,11 +380,10 @@ const routesAndMenuItems = {
           component: dashboards.visual,
           label: 'Users',
           icon: <FaCog size={30} color="white" />,
-          // subs: [
-          //   { path: '/default', label: 'menu.default', component: dashboards.default },
-          //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
-          //   { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
-          // ],
+          subs: [
+            { path: '/users-list', label: 'Users List', component: UserList },
+            { path: '/new-user', label: 'Add New User', component: AddUser },
+          ],
         }
       : {},
     JSON.parse(localStorage.getItem('currentUser'))?.email

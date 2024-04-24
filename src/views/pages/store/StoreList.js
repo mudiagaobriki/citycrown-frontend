@@ -7,13 +7,13 @@ import { useSelector } from 'react-redux';
 import { ColumnDirective, ColumnsDirective, GridComponent, Page, Sort, Filter, Inject } from '@syncfusion/ej2-react-grids';
 import { BsArrowLeft, BsArrowRight, BsPerson, BsCalendar, BsPhone, BsImages, BsGeoAlt, BsHouse, BsGenderAmbiguous, BsEye } from 'react-icons/bs';
 import { FaFloppyDisk, FaPencil } from 'react-icons/fa6';
-import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
-import { MdCancel } from 'react-icons/md';
+// import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
+// import { MdCancel } from 'react-icons/md';
 import { getDownloadURL, ref as storageRef, uploadBytes } from 'firebase/storage';
 import { toast } from 'react-toastify';
-import { BiEdit } from 'react-icons/bi';
-import { AiFillDelete, AiOutlineDelete } from 'react-icons/ai';
-import { FiDelete } from 'react-icons/fi';
+// import { BiEdit } from 'react-icons/bi';
+// import { AiFillDelete, AiOutlineDelete } from 'react-icons/ai';
+// import { FiDelete } from 'react-icons/fi';
 import { GiTrashCan } from 'react-icons/gi';
 import SweetAlert from 'react-bootstrap-sweetalert';
 // import { allRoomTypes } from '../../../services/roomTypeService';
@@ -167,22 +167,22 @@ const StoreList = () => {
     return invalidFields.length === 0;
   };
 
-  const handleSaveClicked = async () => {
-    setLoading(true);
-    const formValid = validateForm();
-    console.log({ formValid });
-    console.log({ errorFields });
+  //   const handleSaveClicked = async () => {
+  //     setLoading(true);
+  //     const formValid = validateForm();
+  //     console.log({ formValid });
+  //     console.log({ errorFields });
 
-    if (formValid) {
-      setLoading(true);
-      setErrorFields([]);
-      // setStep((prevState) => prevState + 1);
-      await uploadImage();
-      setLoading(false);
-    } else {
-      setLoading(false);
-    }
-  };
+  //     if (formValid) {
+  //       setLoading(true);
+  //       setErrorFields([]);
+  //       // setStep((prevState) => prevState + 1);
+  //       await uploadImage();
+  //       setLoading(false);
+  //     } else {
+  //       setLoading(false);
+  //     }
+  //   };
 
   //   const handleClearClicked = () => {
   //     setFormData({
@@ -196,49 +196,49 @@ const StoreList = () => {
   //     ref.current.value = '';
   //   };
 
-  useEffect(() => {
-    // console.log({formData})
-    if (uploadFinished && formData?.name !== '') {
-      if (saveMode === 'save') {
-        setLoading(true);
-        newStore(formData)
-          .then((res) => {
-            setLoading(false);
-            console.log({ formRes: res });
-            if (res?.success) {
-              toast.success(res?.message);
-              allStores(1, 1000).then((response) => {
-                setStoreItems(response);
-              });
-            } else {
-              toast.error(res?.message);
-            }
+  //   useEffect(() => {
+  //     // console.log({formData})
+  //     if (uploadFinished && formData?.name !== '') {
+  //       if (saveMode === 'save') {
+  //         setLoading(true);
+  //         newStore(formData)
+  //           .then((res) => {
+  //             setLoading(false);
+  //             console.log({ formRes: res });
+  //             if (res?.success) {
+  //               toast.success(res?.message);
+  //               allStores(1, 1000).then((response) => {
+  //                 setStoreItems(response);
+  //               });
+  //             } else {
+  //               toast.error(res?.message);
+  //             }
 
-            // eslint-disable-next-line no-use-before-define
-            setUploadFinished(false);
-            // handleClearClicked();
-          })
-          .catch((e) => {
-            console.log({ Err: e.response.data.message });
-            toast.error(e?.response?.data?.message);
-            setLoading(false);
-          });
-      } else {
-        console.log({ formData });
-        // eslint-disable-next-line no-underscore-dangle
-        // if (formData?._id) {
-        //   editStore(prevKey, formData).then((res) => {
-        //     allStores(1, 1000).then((response) => {
-        //       setStoreItems(response);
-        //     });
-        //     // eslint-disable-next-line no-use-before-define
-        //     handleClearClicked();
-        //     setSaveMode('save');
-        //   });
-        // }
-      }
-    }
-  }, [uploadFinished]);
+  //             // eslint-disable-next-line no-use-before-define
+  //             setUploadFinished(false);
+  //             // handleClearClicked();
+  //           })
+  //           .catch((e) => {
+  //             console.log({ Err: e.response.data.message });
+  //             toast.error(e?.response?.data?.message);
+  //             setLoading(false);
+  //           });
+  //       } else {
+  //         console.log({ formData });
+  //         // eslint-disable-next-line no-underscore-dangle
+  //         // if (formData?._id) {
+  //         //   editStore(prevKey, formData).then((res) => {
+  //         //     allStores(1, 1000).then((response) => {
+  //         //       setStoreItems(response);
+  //         //     });
+  //         //     // eslint-disable-next-line no-use-before-define
+  //         //     handleClearClicked();
+  //         //     setSaveMode('save');
+  //         //   });
+  //         // }
+  //       }
+  //     }
+  //   }, [uploadFinished]);
 
   async function handleEditAction() {
     setLoading(true);
@@ -494,55 +494,6 @@ const StoreList = () => {
           <Modal.Title>Edit {selectedItem.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* <Row className="mb-2">
-            <Col>
-              <p className="h5">Number: </p>
-              <p className="font-weight-bold" style={{ fontSize: 24 }}>
-                {selectedItem?.sn}
-              </p>
-            </Col>
-            <Col>
-              <p className="h5">Name: </p>
-              <p className="font-weight-bold text-capitalize" style={{ fontSize: 24 }}>
-                {selectedItem?.name}
-              </p>
-            </Col>
-          </Row>
-          <Row className="mb-2">
-            <Col>
-              <p className="h5">Cost Price: </p>
-              <p className="font-weight-bold" style={{ fontSize: 24 }}>
-                {selectedItem?.costPrice}
-              </p>
-            </Col>
-            <Col>
-              <p className="h5">Sale Price: </p>
-              <p className="font-weight-bold" style={{ fontSize: 24 }}>
-                {selectedItem?.salePrice}
-              </p>
-            </Col>
-            <Col>
-              <p className="h5">Qty: </p>
-              <p className="font-weight-bold" style={{ fontSize: 24 }}>
-                {selectedItem?.quantity}
-              </p>
-            </Col>
-            <Col>
-              <p className="h5">Unit: </p>
-              <p className="font-weight-bold" style={{ fontSize: 24 }}>
-                {selectedItem?.unit}
-              </p>
-            </Col>
-          </Row>
-          <Row className="mb-2">
-            <Col>
-              <p className="h5">Images: </p>
-              {selectedItem?.images?.map((item, index) => {
-                return <img key={index} src={item} alt={`room image ${index}`} style={{ width: 200, height: 200, marginRight: 20 }} />;
-              })}
-            </Col>
-          </Row> */}
-
           <Row className="mb-md-4">
             <Col md={4} className="mb-4 mb-md-2">
               <label htmlFor="name">
