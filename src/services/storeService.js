@@ -5,13 +5,13 @@ export async function allStores(page, limit) {
   const res = await axios.get(`${API_URL}/items/all/${page}/${limit}`);
 
   // console.log("Data: ", res?.data)
-  const docs = res?.data?.data?.docs;
+  const docs = res?.data?.data?.docs || [];
 
-  docs.forEach((doc, index) => {
+  docs?.forEach((doc, index) => {
     doc.sn = index + 1;
   });
 
-  return docs.filter((el) => el?.isDeleted === false);
+  return docs?.filter((el) => el?.isDeleted === false);
 }
 
 export async function newStore(payload) {

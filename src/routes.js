@@ -33,6 +33,7 @@ import Store from 'views/pages/store/Store';
 import StoreList from 'views/pages/store/StoreList';
 import UserList from 'views/pages/users/UserList';
 import AddUser from 'views/pages/users/AddUser';
+import InventoryReports from 'views/pages/reports/InventoryReports';
 
 const dashboards = {
   index: lazy(() => import('views/dashboards/Dashboards')),
@@ -369,7 +370,7 @@ const routesAndMenuItems = {
         { path: '/user-feedback', label: 'User Feedback', component: dashboards.visual },
         { path: '/financials', label: 'Financials', component: dashboards.visual },
         { path: '/booking-reports', label: 'Booking Reports', component: dashboards.visual },
-        { path: '/inventory-reports', label: 'Inventory Reports', component: dashboards.visual },
+        { path: '/inventory-reports', label: 'Inventory Reports', component: InventoryReports },
         { path: '/facility-reports', label: 'Facility Reports', component: dashboards.visual },
         { path: '/analytics', label: 'Analytics', component: dashboards.analytic },
       ],

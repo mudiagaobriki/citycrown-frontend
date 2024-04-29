@@ -5,11 +5,11 @@ export async function allStoreCategories(page, limit) {
   const res = await axios.get(`${API_URL}/item-categories/all/${page}/${limit}`);
 
   console.log('store cats Data: ', res?.data);
-  const docs = res?.data?.data?.docs;
+  const docs = res?.data?.data?.docs || [];
 
   console.log('DDD::', docs);
 
-  return docs.filter((el) => el?.isDeleted === false);
+  return docs?.filter((el) => el?.isDeleted === false);
 }
 
 export async function newStoreCategroy(payload) {
