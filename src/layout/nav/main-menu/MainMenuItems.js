@@ -43,7 +43,7 @@ const MainMenuItem = memo(({ item, id, isSubItem = false, menuPlacement = DEFAUL
     <>
       {icon && (
         <>
-            <span style={{marginRight: 25}}>{icon}</span>{' '}
+          <span style={{ marginRight: 25 }}>{icon}</span>{' '}
         </>
       )}
       <span className="label">{USE_MULTI_LANGUAGE ? f({ id: label }) : label}</span>

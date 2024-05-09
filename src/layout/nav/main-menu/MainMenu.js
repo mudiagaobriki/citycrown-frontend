@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { MENU_PLACEMENT, MENU_BEHAVIOUR } from 'constants.js';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
+import { FaFacebook, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import { getMenuItems } from 'routing/helper';
 import { useWindowSize } from 'hooks/useWindowSize';
 import { useWindowScroll } from 'hooks/useWindowScroll';
@@ -32,7 +34,7 @@ const MainMenu = () => {
       getMenuItems({
         data: attrMobile && useSidebar ? routesAndMenuItems : routesAndMenuItems.mainMenuItems,
         isLogin,
-        userRole: currentUser?.type || "consumer",
+        userRole: currentUser?.type || 'consumer',
       }),
     [isLogin, currentUser, attrMobile, useSidebar]
   );
@@ -106,7 +108,9 @@ const MainMenu = () => {
         }
       }
       // eslint-disable-next-line
-  }, [behaviourStatus,placementStatus,breakpoints]);
+    },
+    [behaviourStatus, placementStatus, breakpoints]
+  );
 
   useEffect(() => {
     if (width && placement && behaviour && breakpoints) {
@@ -139,6 +143,33 @@ const MainMenu = () => {
         <ul id="menu" className={classNames('menu show')}>
           <MainMenuItems menuItems={menuItemsMemo} menuPlacement={placementStatus.view} />
         </ul>
+        <div className="mt-6 text-center d-flex justify-content-center align-items-center gap-3" style={{ color: '#fff' }}>
+          <a
+            href="https://www.facebook.com/profile.php?id=100063980834528&mibextid=rS40aB7S9Ucbxw6v"
+            target="_blank"
+            rel="noreferrer"
+            title="Visit Our Facebook Page"
+          >
+            <FaFacebook color="#046ede" size={23} />
+          </a>
+
+          <a href="#" target="_blank" rel="noreferrer" title="Visit Our Instagram Page">
+            <FaInstagram size={23} color="#bf0465" />
+          </a>
+
+          <a href="https://twitter.com/VictorCliff29" rel="noreferrer" target="_blank" title="Visit Our X Page">
+            <FaXTwitter size={23} color="#fff" />
+          </a>
+
+          <a
+            href="https://wa.me/2347015530378?text=hello+i+am+interested+in+city+crown+hotels+and+i+would+like+to+book+a+reservation"
+            rel="noreferrer"
+            target="_blank"
+            title="Send A Message On Whatsapp"
+          >
+            <FaWhatsapp size={23} color="#03992e" />
+          </a>
+        </div>
       </OverlayScrollbarsComponent>
     );
   }

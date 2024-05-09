@@ -303,20 +303,20 @@ const routesAndMenuItems = {
         { path: '/amenities', label: 'Amenities', component: Amenities },
         // { path: '/amenities-status', label: 'Facilities Status', component: dashboards.visual },
         { path: '/facility-booking', label: 'Facility Bookings', component: FacilityBookings },
-        { path: '/repairs', label: 'Repairs', component: dashboards.visual },
+        // { path: '/repairs', label: 'Repairs', component: dashboards.visual },
       ],
     },
-    {
-      path: `${appRoot}/orders`,
-      component: dashboards.visual,
-      label: 'Orders',
-      icon: <FaFileArchive size={30} color="white" />,
-      // subs: [
-      //   { path: '/default', label: 'menu.default', component: dashboards.default },
-      //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
-      //   { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
-      // ],
-    },
+    // {
+    //   path: `${appRoot}/orders`,
+    //   component: dashboards.visual,
+    //   label: 'Orders',
+    //   icon: <FaFileArchive size={30} color="white" />,
+    //   // subs: [
+    //   //   { path: '/default', label: 'menu.default', component: dashboards.default },
+    //   //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
+    //   //   { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
+    //   // ],
+    // },
     {
       path: `${appRoot}/store`,
       component: Store,
@@ -367,11 +367,11 @@ const routesAndMenuItems = {
       label: 'Report Center',
       icon: <GoReport size={30} color="white" />,
       subs: [
-        { path: '/user-feedback', label: 'User Feedback', component: dashboards.visual },
-        { path: '/financials', label: 'Financials', component: dashboards.visual },
-        { path: '/booking-reports', label: 'Booking Reports', component: dashboards.visual },
+        // { path: '/user-feedback', label: 'User Feedback', component: dashboards.visual },
+        // { path: '/financials', label: 'Financials', component: dashboards.visual },
+        // { path: '/booking-reports', label: 'Booking Reports', component: dashboards.visual },
         { path: '/inventory-reports', label: 'Inventory Reports', component: InventoryReports },
-        { path: '/facility-reports', label: 'Facility Reports', component: dashboards.visual },
+        // { path: '/facility-reports', label: 'Facility Reports', component: dashboards.visual },
         { path: '/analytics', label: 'Analytics', component: dashboards.analytic },
       ],
     },
@@ -387,31 +387,31 @@ const routesAndMenuItems = {
           ],
         }
       : {},
-    JSON.parse(localStorage.getItem('currentUser'))?.email
-      ? {
-          path: `${appRoot}/generate`,
-          component: Amenities,
-          label: 'Bar Code',
-          icon: <FaQrcode size={30} color="white" />,
-          subs: [
-            { path: '/generate', label: 'Generate Barcodes', component: dashboards.visual },
-            { path: '/print-barcode', label: 'Print Barcode', component: dashboards.visual },
-            { path: '/barcode-settings', label: 'Barcode Settings', component: dashboards.visual },
-            // { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
-          ],
-        }
-      : {},
-    {
-      path: `${appRoot}/app-settings`,
-      component: Amenities,
-      label: 'Mobile App',
-      icon: <IoLogoGooglePlaystore size={30} color="white" />,
-      subs: [
-        { path: '/app-settings', label: 'App Store Settings ', component: dashboards.visual },
-        { path: '/app-preferences', label: 'App Preferences', component: dashboards.visual },
-        // { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
-      ],
-    },
+    // JSON.parse(localStorage.getItem('currentUser'))?.email
+    //   ? {
+    //       path: `${appRoot}/generate`,
+    //       component: Amenities,
+    //       label: 'Bar Code',
+    //       icon: <FaQrcode size={30} color="white" />,
+    //       subs: [
+    //         { path: '/generate', label: 'Generate Barcodes', component: dashboards.visual },
+    //         { path: '/print-barcode', label: 'Print Barcode', component: dashboards.visual },
+    //         { path: '/barcode-settings', label: 'Barcode Settings', component: dashboards.visual },
+    //         // { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
+    //       ],
+    //     }
+    //   : {},
+    // {
+    //   path: `${appRoot}/app-settings`,
+    //   component: Amenities,
+    //   label: 'Mobile App',
+    //   icon: <IoLogoGooglePlaystore size={30} color="white" />,
+    //   subs: [
+    //     { path: '/app-settings', label: 'App Store Settings ', component: dashboards.visual },
+    //     { path: '/app-preferences', label: 'App Preferences', component: dashboards.visual },
+    //     // { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
+    //   ],
+    // },
     // {
     //   path: `${appRoot}/apps`,
     //   label: 'menu.apps',

@@ -1,7 +1,7 @@
 import React, { memo, Suspense } from 'react';
 import { Redirect, Switch } from 'react-router-dom';
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { DEFAULT_PATHS } from 'config.js';
 import RouteItem from './RouteItem';
 
@@ -12,7 +12,7 @@ const RouteIdentifier = ({ routes, fallback = <div className="loading" />, notFo
         <RouteItem key={`r.${rIndex}`} {...route} />
       ))}
       <Redirect to={notFoundPath} />
-        <ToastContainer />
+      <ToastContainer />
     </Switch>
   </Suspense>
 );

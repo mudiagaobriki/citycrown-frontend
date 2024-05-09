@@ -491,7 +491,7 @@ const UserList = () => {
               {/* eslint-disable-next-line jsx-a11y/no-onchange */}
               <select name="type" value={formData?.type} className="form-control" onChange={handleChange}>
                 <option value={formData?.type}>{formData?.type}</option>
-                {formData?.type?.toLowerCase() === 'starter' ? <option value="Admin">Admin</option> : <option value="Starter">Starter</option>}
+                {formData?.type?.toLowerCase() === 'customer' ? <option value="Admin">Admin</option> : <option value="Customer">Customer</option>}
               </select>
             </Col>
 

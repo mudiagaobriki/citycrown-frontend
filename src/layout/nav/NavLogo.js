@@ -11,8 +11,7 @@ const NavLogo = () => {
           <img src="/img/logo/logo-white.svg" alt="logo" />
           Or added via css to provide different ones for different color themes
          */}
-          <img src="/img/logo/logo.png" alt="logo" />
-
+        <img src="/img/logo/logo.png" alt="logo" />
       </Link>
     </div>
   );
