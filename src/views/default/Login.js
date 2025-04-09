@@ -59,7 +59,7 @@ const Login = () => {
         setLoading(false)
         dispatch(setCurrentUser(result))
         localStorage.setItem("currentUser", JSON.stringify(result));
-        history.push("/dashboard")
+        history.push("/checkin")
       }
       else{
         toast.error(result.toString());

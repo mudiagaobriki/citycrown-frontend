@@ -348,10 +348,10 @@ const Services = () => {
             <input name='price' type="text" value={formData.price} className="form-control" onChange={handleChange}/>
           </Col>
           <Col md={4} className='mb-4 mb-md-0'>
-            <label htmlFor="status">Status </label>
+            <label htmlFor="status">Category </label>
             {/* eslint-disable-next-line jsx-a11y/no-onchange */}
             <select name='status' value={formData.status} className="form-control" onChange={handleChange}>
-              <option value="">Select a service status</option>
+              <option value="">Select a service category</option>
               <option value="general">General</option>
             </select>
           </Col>

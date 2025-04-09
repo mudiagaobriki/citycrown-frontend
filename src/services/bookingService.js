@@ -6,8 +6,9 @@ export async function allBookings(page, limit) {
 
     // console.log("Data: ", res?.data)
     const docs = res?.data?.data?.docs;
+    // console.log("Docs: ", docs);
 
-    return docs.filter(el => el?.isDeleted === false);
+    return docs.filter(el => !el?.isDeleted);
 }
 
 export async function newBooking(payload) {
@@ -23,8 +24,10 @@ export async function getBooking(id) {
     return res?.data;
 }
 
-export async function editBooking(name, payload) {
-    const res = await axios.patch(`${API_URL}/bookings/edit`, {name, payload});
+export async function editBooking(id, payload) {
+    const res = await axios.patch(`${API_URL}/bookings/edit`, {id, payload});
+
+    // console.log({res})
 
     return res?.data;
 }

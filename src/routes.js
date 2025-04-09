@@ -6,10 +6,20 @@ import Withdrawals from './views/pages/withdrawals/Withdrawals';
 import Admin from './views/pages/admin/Admin';
 import VerificationPage from './views/pages/authentication/VerifyEmail';
 import Wallet from './views/pages/wallet/Wallet';
-import { MdAttachMoney, MdHome, MdRoom } from 'react-icons/md';
+import {MdAttachMoney, MdHome, MdMoneyOff, MdRoom} from 'react-icons/md';
 import { IoBriefcaseOutline, IoHomeSharp, IoLogoGooglePlaystore, IoWallet } from 'react-icons/io5';
 import { IoMdBriefcase } from 'react-icons/io';
-import { FaBriefcase, FaCog, FaCogs, FaFileArchive, FaQrcode, FaUserCog, FaUserFriends, FaWallet } from 'react-icons/fa';
+import {
+  FaBriefcase,
+  FaCog,
+  FaCogs,
+  FaFileArchive,
+  FaQrcode,
+  FaStore,
+  FaUserCog,
+  FaUserFriends,
+  FaWallet
+} from 'react-icons/fa';
 import RoomTypes from './views/pages/room-types/RoomTypes';
 import Amenities from './views/pages/amenities/Amenities';
 import { BiBarcode, BiFoodMenu, BiWifi } from 'react-icons/bi';
@@ -33,6 +43,11 @@ import Store from 'views/pages/store/Store';
 import StoreList from 'views/pages/store/StoreList';
 import UserList from 'views/pages/users/UserList';
 import AddUser from 'views/pages/users/AddUser';
+import KitchenBarOrder from "./views/pages/kitchen-bar/KitchenBarOrder";
+import CheckoutPage from "./views/pages/checkout/CheckoutPage";
+import FacilityBookingPage from "./views/pages/facilities/FacilityBookingPage";
+import StoreInventory from "./views/pages/store/StoreInventory";
+import BookingReportsPage from "./views/pages/reports/BookingReportsPage";
 
 const dashboards = {
   index: lazy(() => import('views/dashboards/Dashboards')),
@@ -202,23 +217,34 @@ const routesAndMenuItems = {
       redirect: true,
       to: `${appRoot}/login`,
     },
+    // {
+    //   path: `${appRoot}/dashboard`,
+    //   component: dashboards.visual,
+    //   label: 'Dashboard',
+    //   icon: <MdHome size={35} color="white" />,
+    //   // component: `${appRoot}/dashboards/default`,
+    //   //  subs: [
+    //   //   { path: '/default', label: 'menu.default', component: dashboards.default },
+    //   //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
+    //   //   { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
+    //   // ],
+    // },
     {
-      path: `${appRoot}/dashboard`,
+      path: `${appRoot}/checkin`,
       component: dashboards.visual,
-      label: 'Dashboard',
-      icon: <MdHome size={35} color="white" />,
-      // component: `${appRoot}/dashboards/default`,
-      //  subs: [
+      label: 'Check In',
+      icon: <MdAttachMoney size={30} color="white" />,
+      // subs: [
       //   { path: '/default', label: 'menu.default', component: dashboards.default },
       //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
       //   { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
       // ],
     },
     {
-      path: `${appRoot}/checkin`,
-      component: dashboards.visual,
-      label: 'Check In',
-      icon: <MdAttachMoney size={30} color="white" />,
+      path: `${appRoot}/bookings`,
+      component: CheckoutPage,
+      label: 'Bookings',
+      icon: <MdMoneyOff size={30} color="white" />,
       // subs: [
       //   { path: '/default', label: 'menu.default', component: dashboards.default },
       //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
@@ -272,11 +298,12 @@ const routesAndMenuItems = {
     {
       path: `${appRoot}/food`,
       component: Amenities,
-      label: 'Kitchen and Bar',
+      label: 'Food and Drinks',
       icon: <BiFoodMenu size={30} color="white" />,
       subs: [
         { path: '/food-categories', label: 'Categories', component: KitchenBarCategories },
         { path: '/food-options', label: 'Presets', component: KitchenBarPresets },
+        { path: '/new-order', label: 'New Order', component: KitchenBarOrder },
         { path: '/food-orders', label: 'Orders', component: KitchenBarOrders },
         // { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
       ],
@@ -288,55 +315,57 @@ const routesAndMenuItems = {
       icon: <GiTowel size={30} color="white" />,
       subs: [
         { path: '/services-list', label: 'Services List', component: Services },
-        { path: '/services-status', label: 'Service Status', component: ServiceOrders },
+        // { path: '/services-status', label: 'Service Status', component: ServiceOrders },
         // { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
       ],
     },
     {
-      path: `${appRoot}/repairs`,
+      path: `${appRoot}/facilities`,
       component: Facilities,
-      label: 'Facility/Repairs',
+      label: 'Facilities',
       icon: <TbAirConditioning size={30} color="white" />,
       subs: [
         { path: '/facility-list', label: 'Facility Lists', component: Facilities },
         { path: '/amenities', label: 'Amenities', component: Amenities },
         // { path: '/amenities-status', label: 'Facilities Status', component: dashboards.visual },
         { path: '/facility-booking', label: 'Facility Bookings', component: FacilityBookings },
-        { path: '/repairs', label: 'Repairs', component: dashboards.visual },
+        { path: '/book-facility', label: 'Book Facility', component: FacilityBookingPage },
+        // { path: '/repairs', label: 'Repairs', component: dashboards.visual },
       ],
     },
-    {
-      path: `${appRoot}/orders`,
-      component: dashboards.visual,
-      label: 'Orders',
-      icon: <FaFileArchive size={30} color="white" />,
-      // subs: [
-      //   { path: '/default', label: 'menu.default', component: dashboards.default },
-      //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
-      //   { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
-      // ],
-    },
+    // {
+    //   path: `${appRoot}/orders`,
+    //   component: dashboards.visual,
+    //   label: 'Orders',
+    //   icon: <FaFileArchive size={30} color="white" />,
+    //   // subs: [
+    //   //   { path: '/default', label: 'menu.default', component: dashboards.default },
+    //   //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
+    //   //   { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
+    //   // ],
+    // },
     {
       path: `${appRoot}/store`,
       component: Store,
       label: 'Store',
-      icon: <FaUserFriends size={30} color="white" />,
+      icon: <FaStore size={30} color="white" />,
       subs: [
         { path: '/store-list', label: 'Store List', component: StoreList },
         { path: '/new', label: 'Add Store Item', component: Store },
+        { path: '/inventory', label: 'Store Inventory', component: StoreInventory },
       ],
     },
-    {
-      path: `${appRoot}/requisition`,
-      component: Requisition,
-      label: 'Requisition',
-      icon: <FaWallet size={30} color="white" />,
-      // subs: [
-      //   { path: '/default', label: 'menu.default', component: dashboards.default },
-      //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
-      //   { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
-      // ],
-    },
+    // {
+    //   path: `${appRoot}/requisition`,
+    //   component: Requisition,
+    //   label: 'Requisition',
+    //   icon: <FaWallet size={30} color="white" />,
+    //   // subs: [
+    //   //   { path: '/default', label: 'menu.default', component: dashboards.default },
+    //   //   { path: '/visual', label: 'menu.visual', component: dashboards.visual },
+    //   //   { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
+    //   // ],
+    // },
     // {
     //   path: `${appRoot}/financials`,
     //   component: dashboards.visual,
@@ -357,7 +386,7 @@ const routesAndMenuItems = {
         { path: '/new-customer', label: 'New Customer', component: NewCustomer },
         { path: '/list', label: 'Customers List', component: CustomerList },
         { path: '/messaging', label: 'Messaging', component: TextMessaging }, // sms, email, whatsapp
-        { path: '/automatic-messaging', label: 'Automatic Messaging', component: dashboards.visual }, // automatic messaging settings
+        // { path: '/automatic-messaging', label: 'Automatic Messaging', component: dashboards.visual }, // automatic messaging settings
       ],
     },
     {
@@ -366,12 +395,12 @@ const routesAndMenuItems = {
       label: 'Report Center',
       icon: <GoReport size={30} color="white" />,
       subs: [
-        { path: '/user-feedback', label: 'User Feedback', component: dashboards.visual },
-        { path: '/financials', label: 'Financials', component: dashboards.visual },
-        { path: '/booking-reports', label: 'Booking Reports', component: dashboards.visual },
-        { path: '/inventory-reports', label: 'Inventory Reports', component: dashboards.visual },
-        { path: '/facility-reports', label: 'Facility Reports', component: dashboards.visual },
-        { path: '/analytics', label: 'Analytics', component: dashboards.analytic },
+        // { path: '/user-feedback', label: 'User Feedback', component: dashboards.visual },
+        { path: '/financials', label: 'Financials', component: <></> },
+        { path: '/booking-reports', label: 'Booking Reports', component: BookingReportsPage },
+        // { path: '/inventory-reports', label: 'Inventory Reports', component: dashboards.visual },
+        // { path: '/facility-reports', label: 'Facility Reports', component: dashboards.visual },
+        // { path: '/analytics', label: 'Analytics', component: dashboards.analytic },
       ],
     },
     JSON.parse(localStorage.getItem('currentUser'))?.email
@@ -386,31 +415,31 @@ const routesAndMenuItems = {
           ],
         }
       : {},
-    JSON.parse(localStorage.getItem('currentUser'))?.email
-      ? {
-          path: `${appRoot}/generate`,
-          component: Amenities,
-          label: 'Bar Code',
-          icon: <FaQrcode size={30} color="white" />,
-          subs: [
-            { path: '/generate', label: 'Generate Barcodes', component: dashboards.visual },
-            { path: '/print-barcode', label: 'Print Barcode', component: dashboards.visual },
-            { path: '/barcode-settings', label: 'Barcode Settings', component: dashboards.visual },
-            // { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
-          ],
-        }
-      : {},
-    {
-      path: `${appRoot}/app-settings`,
-      component: Amenities,
-      label: 'Mobile App',
-      icon: <IoLogoGooglePlaystore size={30} color="white" />,
-      subs: [
-        { path: '/app-settings', label: 'App Store Settings ', component: dashboards.visual },
-        { path: '/app-preferences', label: 'App Preferences', component: dashboards.visual },
-        // { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
-      ],
-    },
+    // JSON.parse(localStorage.getItem('currentUser'))?.email
+    //   ? {
+    //       path: `${appRoot}/generate`,
+    //       component: Amenities,
+    //       label: 'Bar Code',
+    //       icon: <FaQrcode size={30} color="white" />,
+    //       subs: [
+    //         { path: '/generate', label: 'Generate Barcodes', component: dashboards.visual },
+    //         { path: '/print-barcode', label: 'Print Barcode', component: dashboards.visual },
+    //         { path: '/barcode-settings', label: 'Barcode Settings', component: dashboards.visual },
+    //         // { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
+    //       ],
+    //     }
+    //   : {},
+    // {
+    //   path: `${appRoot}/app-settings`,
+    //   component: Amenities,
+    //   label: 'Mobile App',
+    //   icon: <IoLogoGooglePlaystore size={30} color="white" />,
+    //   subs: [
+    //     { path: '/app-settings', label: 'App Store Settings ', component: dashboards.visual },
+    //     { path: '/app-preferences', label: 'App Preferences', component: dashboards.visual },
+    //     // { path: '/analytic', label: 'menu.analytic', component: dashboards.analytic },
+    //   ],
+    // },
     // {
     //   path: `${appRoot}/apps`,
     //   label: 'menu.apps',

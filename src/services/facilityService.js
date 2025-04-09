@@ -7,7 +7,7 @@ export async function allFacilities(page, limit) {
     // console.log("Data: ", res?.data)
     const docs = res?.data?.data?.docs;
 
-    return docs.filter(el => el?.isDeleted === false);
+    return docs.filter(el => !el?.isDeleted);
 }
 
 export async function newFacility(payload) {
@@ -22,8 +22,8 @@ export async function getFacility(id) {
     return res?.data;
 }
 
-export async function editFacility(name, payload) {
-    const res = await axios.post(`${API_URL}/facilities/edit`, {name, payload});
+export async function editFacility(id, payload) {
+    const res = await axios.patch(`${API_URL}/facilities/edit`, {id, payload});
 
     return res?.data;
 }

@@ -237,6 +237,7 @@ const TextMessaging = () => {
           <Col md="7">
             <h1 className="mb-0 pb-0 display-4">{title}</h1>
             <BreadcrumbList items={breadcrumbs} />
+            <p>(Automated messaging coming soon)</p>
           </Col>
           {/* Title End */}
 

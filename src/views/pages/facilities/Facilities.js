@@ -214,8 +214,8 @@ const Facilities = () => {
 
   const handleSaveClicked = async () => {
     const formValid = validateForm();
-    console.log({ formValid });
-    console.log({ errorFields });
+    // console.log({ formValid });
+    // console.log({ errorFields });
     setLoading(true);
     if (formValid) {
       setErrorFields([]);

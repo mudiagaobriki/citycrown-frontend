@@ -55,8 +55,8 @@ import {
 } from "../../../services/KitchenBarPresetService";
 
 const KitchenBarCategories = () => {
-  const title = 'Kitchen and Bar Presets';
-  const description = 'Kitchen and Bar Presets';
+  const title = 'Food and Drink Presets';
+  const description = 'Food and Drink Presets';
 
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState('');
@@ -73,6 +73,7 @@ const KitchenBarCategories = () => {
   const [selectedItem, setSelectedItem] = useState({});
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showItem, setShowItem] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     category: '',
@@ -155,9 +156,10 @@ const KitchenBarCategories = () => {
 
   const handleSaveClicked = async () => {
     const formValid = validateForm()
-    console.log({formData})
-    console.log({ formValid })
-    console.log({ errorFields });
+    // console.log({formData})
+    // console.log({ formValid })
+    // console.log({ errorFields });
+    setLoading(true)
     if (formValid){
       setErrorFields([])
 
@@ -186,7 +188,7 @@ const KitchenBarCategories = () => {
       }
 
     }
-
+    setLoading(false)
   }
 
   const handleClearClicked = () => {

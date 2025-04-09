@@ -298,6 +298,7 @@ const Store = () => {
           {/* eslint-disable-next-line jsx-a11y/no-onchange */}
           <select name="unit" value={formData.unit} className="form-control" onChange={handleChange}>
             <option value="">Select a unit</option>
+            <option value="Pieces">Pieces</option>
             <option value="Rolls">Rolls</option>
             <option value="Packs">Packs</option>
             <option value="Packs">Cartons</option>

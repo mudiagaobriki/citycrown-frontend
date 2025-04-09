@@ -175,7 +175,7 @@ const DashboardsDefault = () => {
     });
 
     if (name === "paid"){
-      const bal = Number(expectedAmt) - Number(value)
+      const bal = Number(expectedAmt) * Number(bookingData?.durationOfStay)  - Number(value)
       console.log({bal})
       setBookingData({
         ...bookingData,
@@ -377,7 +377,7 @@ const DashboardsDefault = () => {
 
         toast.success('Customer checked in successfully.')
 
-        // setTimeout(() => window.location.reload(), 5000)
+        setTimeout(() => window.location.reload(), 5000)
         // eslint-disable-next-line no-underscore-dangle
       }
       else{

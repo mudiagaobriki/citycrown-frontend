@@ -50,8 +50,8 @@ import {
 } from "../../../services/KitchenBarCategoryService";
 
 const KitchenBarCategories = () => {
-  const title = 'Kitchen and Bar Categories';
-  const description = 'Kitchen and Bar Categories';
+  const title = 'Food and Drink Categories';
+  const description = 'Food and Drink Categories';
 
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState('');
@@ -67,6 +67,7 @@ const KitchenBarCategories = () => {
   const [selectedItem, setSelectedItem] = useState({});
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showItem, setShowItem] = useState(false);
+  const [loading, setloading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -143,9 +144,10 @@ const KitchenBarCategories = () => {
 
   const handleSaveClicked = async () => {
     const formValid = validateForm()
-    console.log({formData})
-    console.log({ formValid })
-    console.log({ errorFields });
+    // console.log({formData})
+    // console.log({ formValid })
+    // console.log({ errorFields });
+    setloading(true)
     if (formValid){
       setErrorFields([])
 
@@ -174,7 +176,7 @@ const KitchenBarCategories = () => {
       }
 
     }
-
+    setloading(false)
   }
 
   const handleClearClicked = () => {
@@ -274,7 +276,7 @@ const KitchenBarCategories = () => {
           </Row>
           <Row className="justify-content-center mb-4 mb-md-7 mt-3 g-3">
             <Col md={2} className="align-self-center">
-              <Button onClick={handleSaveClicked} className="btn btn-danger w-100 rounded-2">
+              <Button disabled={loading} onClick={handleSaveClicked} className="btn btn-danger w-100 rounded-2">
                 {
                   saveMode === 'save'? "Save": "Save Changes"
                 } <FaFloppyDisk />
